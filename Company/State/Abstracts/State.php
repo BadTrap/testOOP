@@ -19,6 +19,11 @@ abstract class State implements IState
      */
     protected  $member;
 
+    public function __toString()
+    {
+        self::class;
+    }
+
     /**
      * @param TeamLead $teamLead
      */

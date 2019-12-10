@@ -6,11 +6,19 @@ namespace Company\Members\Current;
 
 use Company\Members\Abstracts\Member;
 use Company\Members\Interfaces\ICompanyMember;
+use Company\State\Current\SuperBadState;
+use Company\State\Current\SuperGoodState;
+use SplObserver;
 
-class  HR extends Member implements ICompanyMember
+class  HR extends Member implements ICompanyMember, SplObserver
 {
     public $name;
+    public $stateCount = 0;
 
+    /**
+     * HR constructor.
+     * @param $name
+     */
     public function __construct($name)
     {
         parent::__construct($name);
@@ -18,14 +26,13 @@ class  HR extends Member implements ICompanyMember
 
 
     /**
-     *
-     * Count of where Team lead feels super bad
-     * @param TeamLead $teamLead
-     * @return mixed
+     * @param \SplSubject $subject
      */
-    public function getBadFeedback(TeamLead $teamLead)
+    public function update(\SplSubject $subject): void
     {
-        return  $teamLead->criticalStates['bad'];
+        if ($subject->state instanceof SuperBadState) {
+            $this->stateCount++;
+        }
     }
 }
 

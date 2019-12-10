@@ -6,11 +6,19 @@ namespace Company\Members\Current;
 
 use Company\Members\Abstracts\Member;
 use Company\Members\Interfaces\ICompanyMember;
+use Company\State\Current\SuperGoodState;
+use SplObserver;
 
-class  Manager extends Member implements ICompanyMember
+class  Manager extends Member implements ICompanyMember, SplObserver
 {
     public $name;
+    public $stateCount = 0;
 
+
+    /**
+     * Manager constructor.
+     * @param $name
+     */
     public function __construct($name)
     {
         parent::__construct($name);
@@ -18,14 +26,13 @@ class  Manager extends Member implements ICompanyMember
 
 
     /**
-     *
-     * Count of where Team lead feels super good
-     * @param TeamLead $teamLead
-     * @return mixed
+     * @param \SplSubject $subject
      */
-    public function getGoodFeedback(TeamLead $teamLead)
+    public function update(\SplSubject $subject): void
     {
-        return  $teamLead->criticalStates['good'];
+        if ($subject->state instanceof SuperGoodState) {
+            $this->stateCount++;
+        }
     }
 }
 

@@ -6,11 +6,25 @@ namespace Company\Members\Current;
 
 use Company\Members\Abstracts\Member;
 use Company\Members\Interfaces\ICompanyMember;
+use SplSubject;
 
-class Junior extends Member implements ICompanyMember
+class Junior extends Member implements ICompanyMember, SplSubject
 {
 
+    /**
+     * @var array
+     */
     public $tasks;
+
+    /**
+     * @var \SplObjectStorage
+     */
+    public $observers;
+
+    /**
+     * @var boolean
+     */
+    public $lastTaskResult;
 
     /**
      * Junior constructor.
@@ -21,6 +35,7 @@ class Junior extends Member implements ICompanyMember
     {
         parent::__construct($name);
         $this->tasks = $tasks;
+        $this->observers = new \SplObjectStorage;
     }
 
     /**
@@ -35,10 +50,40 @@ class Junior extends Member implements ICompanyMember
     /**
      *
      * There is no logic!
-     * @return bool
+     * @return void
      */
-    public function getTaskResult() : bool
+    public function getTaskResult()
     {
-        return rand(0,1) == 1;
+        $this->lastTaskResult = rand(0, 1) == 1;
+        $this->notify();
     }
+
+
+    /**
+     * Методы управления подпиской.
+     * @param \SplObserver $observer
+     */
+    public function attach(\SplObserver $observer): void
+    {
+        echo "Subject: Attached an observer.\n";
+        $this->observers->attach($observer);
+    }
+
+    public function detach(\SplObserver $observer): void
+    {
+        $this->observers->detach($observer);
+        echo "Subject: Detached an observer.\n";
+    }
+
+    /**
+     * Запуск обновления в каждом подписчике.
+     */
+    public function notify(): void
+    {
+        echo "Subject: Notifying observers...\n";
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
+    }
+
 }
