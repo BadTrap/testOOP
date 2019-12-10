@@ -4,12 +4,7 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "Company\\Members\\Current\\": "Company/Members/Current/",
-      "Company\\Members\\Abstracts\\": "Company/Members/Abstracts/",
-      "Company\\Members\\Interfaces\\": "Company/Members/Interfaces/",
-      "Company\\State\\Abstracts\\": "Company/State/Abstracts/",
-      "Company\\State\\Current\\": "Company/State/Current/",
-      "Company\\State\\Interfaces\\": "Company/State/Interfaces/"
+      "Company\\": "Company/"
     }
   }
 }
