@@ -8,7 +8,7 @@ abstract class Member implements ICompanyMember
 {
     public $name;
 
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }

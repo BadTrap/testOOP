@@ -1,16 +1,15 @@
 {
   "require": {
-    "symfony/validator": "2.1.*",
-    "doctrine/dbal": "2.2.*",
-    "monolog/monolog": "dev-master",
-    "jtreminio/test-extensions": "dev-master"
   },
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
       "Company\\Members\\Current\\": "Company/Members/Current/",
       "Company\\Members\\Abstracts\\": "Company/Members/Abstracts/",
-      "Company\\Members\\Interfaces\\": "Company/Members/Interfaces/"
+      "Company\\Members\\Interfaces\\": "Company/Members/Interfaces/",
+      "Company\\State\\Abstracts\\": "Company/State/Abstracts/",
+      "Company\\State\\Current\\": "Company/State/Current/",
+      "Company\\State\\Interfaces\\": "Company/State/Interfaces/"
     }
   }
 }

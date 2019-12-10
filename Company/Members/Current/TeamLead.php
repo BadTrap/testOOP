@@ -5,68 +5,43 @@ namespace Company\Members\Current;
 
 use Company\Members\Abstracts\Member;
 use Company\Members\Interfaces\ICompanyMember;
+use Company\State\Abstracts\State;
 
 class TeamLead extends Member implements ICompanyMember
 {
     public $name;
-    public $currentState;
-    public $allStates = [
-        1 => 'Good!',
-        2 => 'Normas',
-        3 => 'BAD =(',
-        4 => 'SUPER BADDD!'
-    ];
-
-    public $criticalStates = [
-        'good' => 0,
-        'bad' => 0
-    ];
+    public $state;
 
     /**
      * TeamLead constructor.
-     * @param $name
-     * @param $currentState
+     * @param string $name
+     * @param State $state
      */
-    public function __construct(string $name, string $currentState)
+    public function __construct(string $name, State $state )
     {
         parent::__construct($name);
-        $this->currentState = array_search($currentState, $this->allStates);
         $this->name = $name;
+        $this->transitionTo($state);
     }
 
+    /**
+     * Team lead  позволяет изменять объект Состояния во время выполнения.
+     * @param State $state
+     */
+    public function transitionTo(State $state): void
+    {
+        echo "State (Mood): Transition to " . get_class($state) . ".\n";
+        $this->state = $state;
+        $this->state->setTeamLeadMember($this);
+    }
 
     /**
      * @param bool $result
-     * @return string
      */
-    public function checkTaskResult(bool $result): string
+    public function checkTaskResult(bool $result)
     {
-        $allStates = $this->allStates;
-
-        $result ? $this->currentState++ : $this->currentState--;
-        if ($this->currentState <= reset($allStates)) {
-            $this->currentState = reset($allStates);
-            $this->criticalStates['good']++;
-            return 'I am feeling - ' . $this->currentState;
-
-        } elseif ($this->currentState >= key(array_slice($allStates, -1, 1, true))) {
-            $this->currentState = key(array_slice($allStates, -1, 1, true));
-            $this->criticalStates['bad']++;
-            return 'I am feeling - ' . $this->currentState;
-        } else {
-            return 'I am feeling - ' . $this->currentState;
-        }
+        $result ? $this->state->handleGood() :  $this->state->handleBad();
     }
 
-    /**
-     *
-     * Add new state to TeamLead
-     *
-     * @param $currentState
-     */
-    public function addNewState(string $currentState)
-    {
-        array_push($this->allStates, $currentState);
-    }
 
 }
